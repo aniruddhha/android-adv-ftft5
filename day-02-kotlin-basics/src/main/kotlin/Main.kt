@@ -2,12 +2,12 @@ package org.example
 
 import java.util.Date
 
-fun main() {
+fun dataTypesDemo() {
     println("🟢 Data Types 🟢")
 
     var num1 = 10
     num1 = 90
-    var num2: Int = 90
+    var num2 = 90
     num2 = 89
     println("Num1 $num2")
 
@@ -20,6 +20,14 @@ fun main() {
     val dt: Date = Date()
     println("Date $dt")
 
-    val arr: IntArray = intArrayOf(1, 2, 3, 4)
-    println("Array $arr")
+    val arr1: IntArray = intArrayOf(1, 2, 3, 4)
+    println("Array $arr1")
+
+    val arr2 = arrayOf<String>("abc", "pqr", "lmn")
+}
+
+fun data_types_demos() { }
+
+fun main() {
+   dataTypesDemo()
 }
