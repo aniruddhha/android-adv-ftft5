@@ -22,5 +22,4 @@ fun main() {
 
     println(withParameters(n2 = 90, n1 = 89)) // named parameters
     println(inlineFunction(3))
-
 }
