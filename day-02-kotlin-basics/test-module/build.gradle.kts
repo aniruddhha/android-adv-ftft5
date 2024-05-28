@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.23"
+    kotlin("jvm")
 }
 
 group = "org.example"
@@ -11,14 +11,11 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-
-    implementation("com.google.android:android:4.1.1.4")
 }
 
 tasks.test {
     useJUnitPlatform()
 }
-
 kotlin {
     jvmToolchain(11)
 }
