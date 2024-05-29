@@ -6,8 +6,8 @@ class Context(
 ) {
 
     fun compareState(ctx : Context) {
-        println(" Num ${this.num == ctx.num}")
-        println(" Str ${this.str == ctx.str}")
+        println("Num ${this.num == ctx.num}")
+        println("Str ${this.str == ctx.str}")
     }
 }
 
