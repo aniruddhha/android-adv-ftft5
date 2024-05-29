@@ -1,4 +1,7 @@
 package org.example
+interface MailExchanger {
+    fun sendEmail()
+}
 
 fun main() {
 
@@ -22,4 +25,10 @@ fun main() {
 
     pcb.recharge()
     pcb.ground()
+
+    val me: MailExchanger = object : MailExchanger {
+        override fun sendEmail() {
+
+        }
+    }
 }
