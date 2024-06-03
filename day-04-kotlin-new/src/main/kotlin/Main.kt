@@ -6,5 +6,5 @@ package org.example
 // -
 
 fun main() {
-    lambdaBasics()
+    listDemo()
 }

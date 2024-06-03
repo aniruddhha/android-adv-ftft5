@@ -28,3 +28,11 @@ fun forVariation() {
 
     for(i in 0 until 20) { }
 }
+
+fun arrLoop(){
+    var array = arrayOf(1, 2, 3)
+
+    for( i in array) {
+
+    }
+}
