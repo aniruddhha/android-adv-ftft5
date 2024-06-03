@@ -9,4 +9,6 @@ fun hofDemo() {
     val bl1 = arr.any(fun (itm: Int): Boolean {
         return itm == 10
     })
+
+    val res : (n1: Int, n2: Int) -> Int = { n1: Int, n2: Int -> n1*n2 }
 }
