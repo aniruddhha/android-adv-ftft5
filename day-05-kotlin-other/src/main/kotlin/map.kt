@@ -3,6 +3,7 @@ package org.example
 fun basicMapOps() {
     val mp1 = mutableMapOf<Int, String>()
     mp1.put(1, "abc")
+    mp1.put(1, "eut")
     mp1[2] = "pqr"
 
 //    mp1.remove(1)
@@ -13,3 +14,4 @@ fun basicMapOps() {
 
     println(mp1)
 }
+
