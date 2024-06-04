@@ -45,5 +45,47 @@ fun advScp() {
         println(getPort())
         println(getUrl())
     }
+}
+
+fun diff() {
+    "hello".run {
+        println("Length is ${this.length}")
+    }
+
+    "hello".let {
+        println("Length is ${it.length}")
+    }
+
+    val con1 = Connector().apply {
+        this.setPort(9090)
+        this.setUrl("gty")
+    }
+
+    val con2 = Connector().also {
+        it.setUrl("ttt")
+        it.setPort(8989)
+    }
+
+    val con3: String = Connector().let {
+        it.setUrl("ttt")
+        it.setPort(8989)
+//        return "hello" // error
+//        return@let "hello"
+        "hello"
+    }
+
+    val con4: String = Connector().run {
+        this.setUrl("ttt")
+        this.setPort(8989)
+//        return "hello" // error
+//        return@let "hello"
+        "hello"
+    }
+
+    val str2 = with(Connector()) {
+        this.setPort(9876)
+        this.setUrl("avc")
+        return@with "hello"
+    }
 
 }
