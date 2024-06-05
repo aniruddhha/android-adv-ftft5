@@ -1,17 +1,14 @@
 package org.example
 
 import kotlinx.coroutines.*
+import java.io.FileNotFoundException
 
 fun main() {
 
     println("Hello World!")
 
     runBlocking { // Coroutine Scope
-
-        simpleFlow().collect {
-            println(it)
-        }
-
+        exceptionHandling()
     }
     println("Hi Hello")
 }
@@ -104,5 +101,31 @@ suspend fun confinedDemo() {
             delay(1000)
             println("after main ${Thread.currentThread().name}")
         }
+    }
+}
+
+suspend fun exceptionHandling() {
+
+    val handler = CoroutineExceptionHandler { _, throwable ->
+        println(throwable.message)
+    }
+
+    coroutineScope {
+
+        val job1 = launch(handler) {
+            delay(1000)
+            throw ArithmeticException("Bad Data")
+        }
+
+        val job2 = launch(handler) {
+            delay(500)
+            throw FileNotFoundException("No File")
+        }
+
+        val job3 = launch(handler) {
+            println("Works well")
+        }
+
+        joinAll(job1, job2, job3)
     }
 }
