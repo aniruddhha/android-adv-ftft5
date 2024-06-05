@@ -10,6 +10,7 @@ suspend fun makeGetCall() {
     val client: HttpClient = HttpClient.newBuilder().build()
 
     val request: HttpRequest = HttpRequest.newBuilder()
+        .GET()
         .uri(URI.create("https://jsonplaceholder.typicode.com/todos/1"))
         .build()
 
