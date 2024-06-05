@@ -7,7 +7,11 @@ fun main() {
     println("Hello World!")
 
     runBlocking { // Coroutine Scope
-       confinedDemo()
+
+        simpleFlow().collect {
+            println(it)
+        }
+
     }
     println("Hi Hello")
 }
