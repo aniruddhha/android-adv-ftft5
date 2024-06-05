@@ -8,8 +8,12 @@ fun main() {
     println("Hello World!")
 
     runBlocking { // Coroutine Scope
-        exceptionHandling()
+        launch {
+            makeGetCall()
+        }
     }
+
+
     println("Hi Hello")
 }
 
