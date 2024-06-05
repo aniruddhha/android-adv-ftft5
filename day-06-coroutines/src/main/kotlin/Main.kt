@@ -7,7 +7,7 @@ fun main() {
     println("Hello World!")
 
     runBlocking { // Coroutine Scope
-        concurrency()
+       confinedDemo()
     }
     println("Hi Hello")
 }
@@ -62,5 +62,43 @@ suspend fun concurrency() {
         println("✅ Task2 Completed")
 
         println("Results $res1, $res2")
+    }
+}
+
+suspend fun dispatchers(){
+    coroutineScope {
+
+        launch {
+            println("1. main runBlocking ${Thread.currentThread().name}")
+        }
+
+        launch(Dispatchers.Unconfined) {
+            println("2. Unconfined ${Thread.currentThread().name}")
+        }
+
+        launch(Dispatchers.Default) {
+            println("3. Default ${Thread.currentThread().name}")
+        }
+
+        launch(newSingleThreadContext("mythread")) {
+            println("4. mythread ${Thread.currentThread().name}")
+        }
+    }
+}
+
+suspend fun confinedDemo() {
+    coroutineScope {
+
+        launch(Dispatchers.Unconfined) {
+            println("Before Suspention ${Thread.currentThread().name}")
+            delay(500)
+            println("After Suspention ${Thread.currentThread().name}")
+        }
+
+        launch {
+            println("before main ${Thread.currentThread().name}")
+            delay(1000)
+            println("after main ${Thread.currentThread().name}")
+        }
     }
 }
