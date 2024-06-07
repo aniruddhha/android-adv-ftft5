@@ -2,6 +2,7 @@ package com.ani.android.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -20,11 +21,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val textView = findViewById<TextView>(R.id.text)
+        textView.text = "Setting without Co-routine"
 
         val scp = CoroutineScope(Dispatchers.Main)
         scp.launch {
             delay(2000)
             textView.text = "Changing from code"
+        }
+
+        val btn = findViewById<Button>(R.id.button)
+        btn.setOnClickListener {
+            textView.text = "Setting on Btn Click"
         }
     }
 }
