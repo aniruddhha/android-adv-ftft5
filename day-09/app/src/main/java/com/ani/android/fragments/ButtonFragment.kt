@@ -26,7 +26,7 @@ class ButtonFragment : Fragment() {
 
         view.findViewById<Button>(R.id.button).setOnClickListener {
             val cnt = (requireHost() as MainActivity).sharedData.value ?: 0
-            (requireHost() as MainActivity).sharedData.value = cnt + 1
+            (requireActivity() as MainActivity).sharedData.value = cnt + 1
         }
     }
 }

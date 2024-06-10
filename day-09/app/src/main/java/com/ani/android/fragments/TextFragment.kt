@@ -20,7 +20,7 @@ class TextFragment : Fragment() {
 
         val text = view.findViewById<TextView>(R.id.textView)
 
-        (requireActivity() as MainActivity).sharedData.observe(viewLifecycleOwner) {
+        (requireActivity() as MainActivity).sharedData.observe(requireActivity()) {
             text.text = "$it"
         }
     }
