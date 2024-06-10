@@ -9,7 +9,6 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView2"
-        android:name="com.ani.android.fragments.ButtonFragment"
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:layout_marginStart="8dp"
@@ -22,7 +21,6 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:name="com.ani.android.fragments.TextFragment"
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:layout_marginStart="8dp"
