@@ -3,7 +3,12 @@
     <style name="Base.Theme.SimpleUiApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:textSize">60sp</item>
     </style>
 
     <style name="Theme.SimpleUiApp" parent="Base.Theme.SimpleUiApp" />
+
+    <style name="bigText">
+        <item name="android:textSize">@dimen/logo_font_size</item>
+    </style>
 </resources>

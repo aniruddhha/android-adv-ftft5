@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SimpleUiApp</string>
+    <string name="btn_nm">Start</string>
+    <string name="welcome">Hello World</string>
 </resources>
