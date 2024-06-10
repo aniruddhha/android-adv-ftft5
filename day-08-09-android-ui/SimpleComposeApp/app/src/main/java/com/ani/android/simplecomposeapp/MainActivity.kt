@@ -29,14 +29,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
 fun TextButton() {
-
-    println("Hey I am called")
-
     val text: MutableState<String> = remember {
         mutableStateOf("hello")
     }
+
+    println("Hey I am called")
 
     Column {
         Text(
