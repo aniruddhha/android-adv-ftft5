@@ -53,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
             android:text="Button"
+            android:onClick="@{() -> vm.onBtnClick()}"
             app:layout_constraintStart_toStartOf="@+id/progressBar"
             app:layout_constraintTop_toBottomOf="@+id/progressBar" />
     </androidx.constraintlayout.widget.ConstraintLayout>

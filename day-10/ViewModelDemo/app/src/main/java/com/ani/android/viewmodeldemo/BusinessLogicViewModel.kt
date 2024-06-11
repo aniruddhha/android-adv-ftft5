@@ -1,5 +1,6 @@
 package com.ani.android.viewmodeldemo
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,5 +24,19 @@ class BusinessLogicViewModel: ViewModel() {
 
     fun  getProgress(): Int {
         return uiState.value?.progress ?: 0
+    }
+
+    fun onBtnClick() {
+        Log.i("@ani", "Called ${getProgress()}")
+//        _uiState.value?.let {
+//            it.progress = getProgress() + 5
+//        }
+
+        _uiState.value?.let {
+           val newState = it.copy(progress = getProgress() + 5)
+            _uiState.value = newState
+        }
+
+//        _uiState.value = UiState("okay", true, 100)
     }
 }

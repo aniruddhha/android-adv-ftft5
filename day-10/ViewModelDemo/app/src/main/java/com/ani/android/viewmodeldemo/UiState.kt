@@ -1,7 +1,7 @@
 package com.ani.android.viewmodeldemo
 
 data class UiState (
-    val text :  String,
-    val isChecked: Boolean,
-    val progress: Int
+    var text :  String,
+    var isChecked: Boolean,
+    var progress: Int
 )
