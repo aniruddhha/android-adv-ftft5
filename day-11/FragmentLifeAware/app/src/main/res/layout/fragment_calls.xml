@@ -2,12 +2,16 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
+        <variable
+            name="vm"
+            type="com.ani.android.life.ui.CallsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#ff0000">
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
