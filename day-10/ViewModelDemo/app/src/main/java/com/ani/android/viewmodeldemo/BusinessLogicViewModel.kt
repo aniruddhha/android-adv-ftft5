@@ -1,9 +1,11 @@
 package com.ani.android.viewmodeldemo
 
 import android.util.Log
+import androidx.databinding.Bindable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 
 class BusinessLogicViewModel: ViewModel() {
 
@@ -14,27 +16,35 @@ class BusinessLogicViewModel: ViewModel() {
         _uiState.value = us
     }
 
-    fun getText(): String {
-        return uiState.value?.text ?: "default"
-    }
 
-    fun getCheckState(): Boolean {
-        return uiState.value?.isChecked ?: false
-    }
+    val text: LiveData<String> = uiState.map { it.text } // convert text field to LiveDate
+    val checkState: LiveData<Boolean> = uiState.map { it.isChecked }
+    val progress: LiveData<Int> =  uiState.map { it.progress }
 
-    fun  getProgress(): Int {
-        return uiState.value?.progress ?: 0
-    }
+//    fun getText(): String {
+//        return uiState.value?.text ?: "default"
+//    }
+//
+//    fun getCheckState(): Boolean {
+//        return uiState.value?.isChecked ?: false
+//    }
+//
+//    fun  getProgress(): Int {
+//        return uiState.value?.progress ?: 0
+//    }
 
     fun onBtnClick() {
-        Log.i("@ani", "Called ${getProgress()}")
+//        Log.i("@ani", "Called ${getProgress()}")
 //        _uiState.value?.let {
 //            it.progress = getProgress() + 5
 //        }
 
         _uiState.value?.let {
-           val newState = it.copy(progress = getProgress() + 5)
-            _uiState.value = newState
+//           val newState = UiState(text= it.text, isChecked = it.isChecked, progress = it.progress  + 5)
+            val newState = it.copy(progress = it.progress  + 5)
+            _uiState.postValue(newState)
+//            it.progress = it.progress  + 5
+
         }
 
 //        _uiState.value = UiState("okay", true, 100)
