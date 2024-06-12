@@ -16,6 +16,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.asIntState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,7 +34,7 @@ class MainActivity : ComponentActivity() {
 //        enableEdgeToEdge()
         setContent {
             ComposeAdvTheme {
-                Counter(msg = "Hey Hi")
+                CounterWithViewModel()
             }
         }
     }
@@ -63,6 +66,36 @@ fun Counter(msg: String) {
 //                cnt++
                 setCnt( cnt + 1 )
                 Log.i("@ani", "Count $cnt")
+            }) {
+                Text(text = "Okay")
+            }
+        }
+    }
+}
+
+@Composable
+fun CounterWithViewModel(
+    vm : MainViewModel = MainViewModel()
+) {
+   val state: State<Int> = vm.count.collectAsState()
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "${state.value}",
+                fontSize = 24.sp
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            Button(onClick = {
+                vm.increment()
+                Log.i("@ani", "Count ${state.value}")
             }) {
                 Text(text = "Okay")
             }
