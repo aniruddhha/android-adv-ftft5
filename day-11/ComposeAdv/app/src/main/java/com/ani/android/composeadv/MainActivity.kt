@@ -29,12 +29,17 @@ import androidx.compose.ui.unit.sp
 import com.ani.android.composeadv.ui.theme.ComposeAdvTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val vm : MainViewModel = MainViewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge()
+
+
         setContent {
             ComposeAdvTheme {
-                CounterWithViewModel()
+                CounterWithViewModel(vm)
             }
         }
     }
