@@ -29,21 +29,28 @@
         android:name="com.ani.android.navapp.UsersFragment"
         tools:layout="@layout/fragment_users"
         />
+
     <fragment
         android:id="@+id/billsFragment"
         android:name="com.ani.android.navapp.BillsFragment"
         android:label="fragment_bills"
         tools:layout="@layout/fragment_bills" />
+
     <fragment
         android:id="@+id/invoicesFragment2"
         android:name="com.ani.android.navapp.InvoicesFragment"
         android:label="fragment_invoices"
-        tools:layout="@layout/fragment_invoices" />
+        tools:layout="@layout/fragment_invoices" >
+        <argument
+            android:name="invId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.ani.android.navapp.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
-
 
 </navigation>
