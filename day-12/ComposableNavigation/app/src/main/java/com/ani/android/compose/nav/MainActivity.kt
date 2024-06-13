@@ -28,10 +28,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         setContent {
             ComposableNavigationTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
 
                     val navController = rememberNavController()
 
@@ -50,7 +49,8 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         ) {
-                            Invoices()
+                            val invId = it.arguments?.getInt("invId") ?: 0
+                            Invoices(invId = invId)
                         }
                         composable("users") {
                             Users()
@@ -76,13 +76,13 @@ fun Home(navController: NavController) {
 }
 
 @Composable
-fun Invoices() {
+fun Invoices(invId: Int) {
     Column(
         Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
         ) {
-       Text(text = "Invoices")
+       Text(text = "Invoices $invId")
     }
 }
 
