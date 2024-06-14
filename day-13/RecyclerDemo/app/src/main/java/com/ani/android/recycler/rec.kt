@@ -1,11 +1,15 @@
 package com.ani.android.recycler
 
+import android.provider.ContactsContract.Data
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 
 data class DataItem(
     val img: Int,
@@ -15,8 +19,11 @@ class SimpleAdapter(
     private val dataSource: List<DataItem>
 ): RecyclerView.Adapter<SimpleAdapter.SimpleViewHolder>() {
 
+    private val _channel = Channel<DataItem>()
+    val channel: Flow<DataItem> = _channel.receiveAsFlow()
+
     class SimpleViewHolder(
-        private val view: View
+       val view: View
     ): RecyclerView.ViewHolder(view) {
         val image: ImageView
         val text: TextView
@@ -46,5 +53,10 @@ class SimpleAdapter(
         val (img, ttl) = dataSource[position]
         holder.image.setImageResource(img)
         holder.text.text = ttl
+        holder.view.setOnClickListener {
+            _channel.trySend(
+                dataSource[position]
+            )
+        }
     }
 }
