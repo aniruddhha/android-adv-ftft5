@@ -38,7 +38,9 @@ class MyRepository(
 ) {
 //    val nextInt: Flow<Int> = service.randomNumber
 
-    val nextInt: Int = service.randomNumber
+    val nextInt: Int
+        get() = service.randomNumber
+
 }
 
 class Vm(
