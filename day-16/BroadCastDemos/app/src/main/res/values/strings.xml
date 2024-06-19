@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BroadCastDemos</string>
+    <string name="title_activity_sports">SportsActivity</string>
+    <string name="title_activity_news">NewsActivity</string>
+</resources>
