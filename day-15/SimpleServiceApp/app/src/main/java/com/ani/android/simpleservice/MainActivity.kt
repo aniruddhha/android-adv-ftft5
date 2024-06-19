@@ -1,9 +1,13 @@
 package com.ani.android.simpleservice
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
@@ -23,6 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.lifecycleScope
 import com.ani.android.simpleservice.ui.theme.SimpleServiceAppTheme
@@ -39,6 +46,7 @@ class MainActivity : ComponentActivity() {
                 when(it) {
                     1 -> startForegroundService()
                     2 -> bindWithService()
+                    3 -> showSimpleNotification()
                 }
             }
         }
@@ -80,6 +88,45 @@ class MainActivity : ComponentActivity() {
             startForegroundService(intent)
         }
     }
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is not in the Support Library.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "myChannel"
+            val descriptionText = "Channel Description"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("abc", name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system.
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+
+    private fun showSimpleNotification() {
+        val builder = NotificationCompat.Builder(this, "abc")
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("abc")
+            .setContentText("pqr")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        createNotificationChannel()
+
+        with(NotificationManagerCompat.from(this)) {
+            if (ActivityCompat.checkSelfPermission(
+                    this@MainActivity,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+            notify(123, builder.build())
+        }
+    }
 }
 
 @Composable
@@ -96,6 +143,11 @@ fun Greeting(viewModel: MyViewModel) {
             viewModel.handleOnClick(2)
         }) {
             Text(text = "Bind Service")
+        }
+        Button(onClick = {
+            viewModel.handleOnClick(3)
+        }) {
+            Text(text = "Simple Notification")
         }
     }
 }
