@@ -21,10 +21,10 @@ data class VehicleClass(
 @Dao
 interface VehicleClassDao {
     @Query("select * from vehicle_class")
-    fun getAllClasses(): List<VehicleClass>
+    suspend fun getAllClasses(): List<VehicleClass>
 
     @Insert
-    fun createNewVehicleClass(cls: VehicleClass)
+    suspend fun createNewVehicleClass(cls: VehicleClass)
 }
 
 @Database(entities = [VehicleClass::class], version = 1)
