@@ -1,7 +1,10 @@
 package com.ani.android.contentprovider
 
 import android.content.ContentResolver
+import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.provider.ContactsContract
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
@@ -45,6 +48,9 @@ class ContactRepository(val context: Context) {
 
     fun fetchContactsList(): List<Contact>? {
         //select (name, number) from contact
+
+            createVehicleClass()
+
             return cr.query(
                 ContactsContract.Data.CONTENT_URI,
                 PROJECTION,
@@ -71,4 +77,19 @@ class ContactRepository(val context: Context) {
                 list
             }
         }
+
+    fun createVehicleClass() {
+
+        val cv = ContentValues()
+        cv.put("id", 12)
+        cv.put("vehicleClass", "abc")
+        cv.put("numAxel", 4)
+        cv.put("fair", 100)
+
+        cr.insert(
+            Uri.parse("content://com.ani.provider.vehicle.data"),
+            cv
+        )
     }
+}
+

@@ -1,6 +1,7 @@
 package com.ani.android.data
 
 import android.app.Application
+import android.util.Log
 import androidx.room.Room
 
 class MyApp : Application() {
@@ -20,7 +21,7 @@ class MyApp : Application() {
 //        db
 //        db
 //        db
-//        Log.i("@ani", "1 ${db.hashCode()}")
+        Log.i("@ani", "1 ${db.hashCode()}")
 //        Log.i("@ani", "2 ${db.hashCode()}")
 //        Log.i("@ani", "3 ${db.hashCode()}")
 //        Log.i("@ani", "4 ${db.hashCode()}")
