@@ -12,4 +12,6 @@ class VehicleClassRepository(
     suspend fun getAllClasses(): List<VehicleClass> = vehicleClassDao.getAllClasses()
 
     suspend fun createNewVehicle(vehicle: VehicleClass) = vehicleClassDao.createNewVehicleClass(vehicle)
+
+    fun getAllClassesV2(): Flow<VehicleClass?> = vehicleClassDao.getAllClassesV2()
 }

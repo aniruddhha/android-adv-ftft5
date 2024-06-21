@@ -40,7 +40,6 @@ class MyRepository(
 
     val nextInt: Int
         get() = service.randomNumber
-
 }
 
 class Vm(
