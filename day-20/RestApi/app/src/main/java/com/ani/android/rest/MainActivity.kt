@@ -24,9 +24,19 @@ class MainActivity : ComponentActivity() {
         val apiService: RestApiService = (application as MyApp).restApiService
 
         lifecycleScope.launch {
-            apiService.getPosts().forEach {
-                Log.i("@ani", it.toString())
-            }
+//            apiService.getPosts().forEach {
+//                Log.i("@ani", it.toString())
+//            }
+
+            val savedPost = apiService.create(Post(
+                userId = 10,
+                id = 0,
+                title = "Good Work",
+                body = "It is okay, to work with android"
+            ))
+
+            Log.i("@ani", "🟢 Saved Post 🟢")
+            Log.i("@ani", savedPost.toString())
         }
 
         enableEdgeToEdge()
