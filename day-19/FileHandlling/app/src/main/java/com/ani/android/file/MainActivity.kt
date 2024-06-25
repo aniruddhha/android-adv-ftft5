@@ -138,15 +138,15 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun writePublicImages() {
-        val resolver = applicationContext.contentResolver
-
-        val newImageDetails = ContentValues().apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//                put(MediaStore.Images.Media.IS_PENDING, 0)
-            }
-        }
-
-        resolver.update(photoUri, newImageDetails, null, null)
+//        val resolver = applicationContext.contentResolver
+//
+//        val newImageDetails = ContentValues().apply {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+////                put(MediaStore.Images.Media.IS_PENDING, 0)
+//            }
+//        }
+//
+//        resolver.update(photoUri, newImageDetails, null, null)
 //        resolver.insert(photoUri, newImageDetails)
 
         readAllPublicImages()

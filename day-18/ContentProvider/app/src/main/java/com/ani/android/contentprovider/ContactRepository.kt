@@ -87,7 +87,7 @@ class ContactRepository(val context: Context) {
         cv.put("fair", 100)
 
         cr.insert(
-            Uri.parse("content://com.ani.provider.vehicle.data"),
+            Uri.parse("content://my.vehicle.data/vehicle_class"),
             cv
         )
     }

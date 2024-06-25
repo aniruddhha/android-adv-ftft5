@@ -16,7 +16,7 @@
 
         <provider
             android:name=".AppDataProvider"
-            android:authorities="com.ani.provider.vehicle.data"
+            android:authorities="my.vehicle.data"
             android:enabled="true"
             android:exported="true"/>
 
