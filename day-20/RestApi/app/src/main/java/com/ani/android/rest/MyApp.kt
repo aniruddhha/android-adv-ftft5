@@ -15,7 +15,15 @@ class MyApp: Application() {
             .build()
     }
 
-    val restApiService: RestApiService by lazy {
+    private val restApiService: RestApiService by lazy {
         retrofit.create(RestApiService::class.java)
+    }
+
+    private val repository: RemoteRepository by lazy {
+        RemoteRepository(restApiService)
+    }
+
+    val vm: ApiViewModel by lazy {
+        ApiViewModel(repository)
     }
 }

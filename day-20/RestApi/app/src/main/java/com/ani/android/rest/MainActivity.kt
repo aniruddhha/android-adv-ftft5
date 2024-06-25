@@ -7,6 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import com.ani.android.rest.ui.theme.RestApiTheme
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -21,28 +25,26 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val apiService: RestApiService = (application as MyApp).restApiService
+        val vm: ApiViewModel = (application as MyApp).vm
 
-        lifecycleScope.launch {
-//            apiService.getPosts().forEach {
-//                Log.i("@ani", it.toString())
-//            }
+        vm.getPosts()
 
-            val savedPost = apiService.create(Post(
-                userId = 10,
-                id = 0,
-                title = "Good Work",
-                body = "It is okay, to work with android"
-            ))
+//        lifecycleScope.launch {
+//
+//            val savedPost = apiService.create(Post(
+//                userId = 10,
+//                id = 0,
+//                title = "Good Work",
+//                body = "It is okay, to work with android"
+//            ))
+//
+//            Log.i("@ani", "🟢 Saved Post 🟢")
+//            Log.i("@ani", savedPost.toString())
+//        }
 
-            Log.i("@ani", "🟢 Saved Post 🟢")
-            Log.i("@ani", savedPost.toString())
-        }
-
-        enableEdgeToEdge()
         setContent {
             RestApiTheme {
-
+              PostList(vm = vm)
             }
         }
     }
