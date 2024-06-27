@@ -1,8 +1,13 @@
 package com.ani.android.location
 
 import android.Manifest
+import android.content.ComponentName
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -29,13 +34,54 @@ import com.ani.android.location.ui.theme.LocationAppTheme
 import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
+
+    private var mService: BbService? = null
+
+    private val conn: ServiceConnection = object : ServiceConnection {
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as BbService.LocalBinder
+            mService = binder.getServiceInstance()
+
+            Log.i("@ani", "In Activity")
+            Log.i("@ani", "Lat ${mService?.location?.latitude} Lng: ${mService?.location?.latitude} ")
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            mService = null
+        }
+    }
+
+    private fun bindToBbService() {
+        bindService(Intent(this, BbService::class.java), conn, BIND_AUTO_CREATE)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         setContent {
             LocationAppTheme {
-                BgLocationAccessScreen()
+
+                Column {
+                    Button(onClick = { bindToBbService() }) {
+                        Text(text = "Get Locations")
+                    }
+
+                    Button(onClick = {
+                        Log.i("@ani", "Checking New Location")
+                        Log.i("@ani", "Lat ${mService?.location?.latitude} Lng: ${mService?.location?.latitude} ")
+                    }) {
+                        Text(text = "Check New Location ")
+                    }
+                }
             }
+        }
+    }
+
+    private fun startForegroundService() {
+        val intent = Intent(this, BbService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
         }
     }
 }
@@ -48,7 +94,7 @@ fun BgLocationAccessScreen() {
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
         ),
-        requiredPermissions = listOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+        requiredPermissions = listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
         onGranted = {
             // From Android 10 onwards request for background permission only after fine or coarse is granted
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
