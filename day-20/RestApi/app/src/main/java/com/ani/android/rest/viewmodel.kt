@@ -1,5 +1,6 @@
 package com.ani.android.rest
 
+import android.util.Log
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,7 +20,20 @@ class ApiViewModel(
     val stNrml: StateFlow<List<Post>?> = _stNrm
     fun getPosts() {
         viewModelScope.launch {
-            _stNrm.update {  remoteRepository.getPostNormal() }
+//            _stNrm.update {  remoteRepository.getPostNormal() }
+        }
+    }
+
+    fun callTest() {
+
+        viewModelScope.launch {
+            val res = remoteRepository.test()
+            Log.i("@ani", "Response $res")
+        }
+
+        viewModelScope.launch {
+            val txns = remoteRepository.test2()
+            txns.forEach { Log.i("@ani", it.toString()) }
         }
     }
 }

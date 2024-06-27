@@ -26,8 +26,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val vm: ApiViewModel = (application as MyApp).vm
+        vm.callTest()
 
-        vm.getPosts()
+//        vm.getPosts()
 
 //        lifecycleScope.launch {
 //
