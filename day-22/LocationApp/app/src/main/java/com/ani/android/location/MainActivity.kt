@@ -13,6 +13,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -31,6 +32,12 @@ import androidx.work.WorkManager
 import androidx.work.PeriodicWorkRequestBuilder
 
 import com.ani.android.location.ui.theme.LocationAppTheme
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
 import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
@@ -62,6 +69,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             LocationAppTheme {
 
+                val cameraPositionState = rememberCameraPositionState() {
+                    position = CameraPosition.fromLatLngZoom(LatLng(mService?.location?.latitude ?: 1.35, mService?.location?.longitude ?: 103.87), 10f)
+                }
+
                 Column {
                     Button(onClick = { bindToBbService() }) {
                         Text(text = "Get Locations")
@@ -72,6 +83,18 @@ class MainActivity : ComponentActivity() {
                         Log.i("@ani", "Lat ${mService?.location?.latitude} Lng: ${mService?.location?.latitude} ")
                     }) {
                         Text(text = "Check New Location ")
+                    }
+
+                    GoogleMap(
+                        modifier = Modifier.fillMaxSize(),
+                        cameraPositionState = cameraPositionState
+                    ) {
+                        Marker(
+                            state = MarkerState(position = LatLng(mService?.location?.latitude ?: 1.35, mService?.location?.longitude ?: 103.87)),
+                            title = "Pune",
+                            snippet = "Marker on Live Location"
+
+                        )
                     }
                 }
             }
