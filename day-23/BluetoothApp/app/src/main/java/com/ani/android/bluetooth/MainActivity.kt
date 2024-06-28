@@ -199,7 +199,12 @@ class MainActivity : ComponentActivity() {
     inner class BtServer: Thread() {
 
         private val mmServerSocket: BluetoothServerSocket? by lazy(LazyThreadSafetyMode.NONE) {
-            bluetoothAdapter?.listenUsingInsecureRfcommWithServiceRecord(SERVER_NAME, MY_UUID)
+            if (ContextCompat.checkSelfPermission(
+                    this@MainActivity,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) null
+            else bluetoothAdapter?.listenUsingInsecureRfcommWithServiceRecord(SERVER_NAME, MY_UUID)
         }
 
         override fun run() {
