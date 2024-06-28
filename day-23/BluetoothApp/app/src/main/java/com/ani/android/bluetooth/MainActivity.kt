@@ -4,11 +4,14 @@ import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothServerSocket
+import android.bluetooth.BluetoothSocket
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.content.res.Resources.Theme
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -41,6 +44,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.util.UUID
 
 data class BtDv(
     val nm: String?,
@@ -49,18 +54,29 @@ data class BtDv(
 
 class MainActivity : ComponentActivity() {
 
+    private val SERVER_NAME = "MyBtServer"
+    private val MY_UUID = UUID.fromString("3f8e7ba8-e791-4ab3-b6eb-e7abf21bd379")
+    private var bluetoothAdapter: BluetoothAdapter? = null
     private val _flow : Channel<BtDv> = Channel()
     private val flow: Flow<BtDv> = _flow.receiveAsFlow()
 
-    private val btEnableLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+    private val btEnableLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
 
             if (it.resultCode == RESULT_OK) {
                 Log.i("@ani", "You Turned Bt on")
             } else {
                 Log.i("@ani", "Your BT is off")
             }
+    }
+
+    private val btMakeDiscoverableLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+
+        if (it.resultCode ==  300) {
+            Log.i("@ani", "Your Device is Discoverable")
+        } else {
+            Log.i("@ani", "You Rejected Device Discovery")
         }
+    }
 
     private val btReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -100,6 +116,8 @@ class MainActivity : ComponentActivity() {
 
         val vm = BtViewModel()
 
+        BtServer().start()
+
         lifecycleScope.launch {
             flow.collect {
 //                vm.addDevice(this.receive())
@@ -109,7 +127,7 @@ class MainActivity : ComponentActivity() {
             }
         }
         val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
-        val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
+        bluetoothAdapter = bluetoothManager.adapter
 
         if (bluetoothAdapter == null) {
             Log.i("@ani", "Bluetooth Not Available")
@@ -159,7 +177,7 @@ class MainActivity : ComponentActivity() {
         val ourList: List<BtDv> = pairedDevices.map { BtDv(it.name, it.address) }
     }
 
-    private fun discoverDevices(btAdapter: BluetoothAdapter) {
+    private fun discoverDevices(btAdapter: BluetoothAdapter?) {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.BLUETOOTH_SCAN
@@ -167,7 +185,120 @@ class MainActivity : ComponentActivity() {
         ) {
             return
         }
-        btAdapter.startDiscovery()
+        btAdapter?.startDiscovery()
+    }
+
+    private fun makeMeDiscoverable() {
+        val discoverableIntent: Intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
+            putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
+        }
+
+        btMakeDiscoverableLauncher.launch(discoverableIntent)
+    }
+
+    inner class BtServer: Thread() {
+
+        private val mmServerSocket: BluetoothServerSocket? by lazy(LazyThreadSafetyMode.NONE) {
+            bluetoothAdapter?.listenUsingInsecureRfcommWithServiceRecord(SERVER_NAME, MY_UUID)
+        }
+
+        override fun run() {
+
+            var shouldLoop = true
+
+            while (shouldLoop) {
+
+                val socket: BluetoothSocket? = try {
+                    mmServerSocket?.accept()
+                } catch (e: IOException) {
+                    Log.e("@ani", "Socket's accept() method failed", e)
+                    shouldLoop = false
+                    null
+                }
+                socket?.also {
+                    manageMyConnectedSocket(it)
+                    mmServerSocket?.close()
+                    shouldLoop = false
+                }
+            }
+        }
+
+        fun cancel() {
+            try {
+                mmServerSocket?.close()
+            } catch (e: IOException) {
+                Log.e("@ani", "Could not close the connect socket", e)
+            }
+        }
+
+        private fun manageMyConnectedSocket(socket: BluetoothSocket) {
+            val inputStream = socket.inputStream
+            val outputStream = socket.outputStream
+
+//            val buffer = ByteArray(1024)
+//            var numBytes: Int = inputStream.read(buffer)
+//            val messageFromClient = String(buffer, 0, numBytes)
+
+                try {
+                    val messageFromClient = inputStream.bufferedReader().use { it.readText() }
+
+                    Log.i("@ani", "Message Received From Client")
+                    Log.i("@ani", messageFromClient)
+
+                    outputStream.write("Hey We are connected".toByteArray())
+                } catch (e: IOException) {
+                    Log.e("@ani", "Error while writing the data")
+                }
+//            }
+        }
+    }
+
+    inner class BtClient(device: BluetoothDevice): Thread() {
+
+        private val mmSocket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
+            device.createRfcommSocketToServiceRecord(MY_UUID)
+        }
+
+        public override fun run() {
+            // Cancel discovery because it otherwise slows down the connection.
+            bluetoothAdapter?.cancelDiscovery()
+
+            mmSocket?.let { socket ->
+                // Connect to the remote device through the socket. This call blocks
+                // until it succeeds or throws an exception.
+                socket.connect()
+
+                // The connection attempt succeeded. Perform work associated with
+                // the connection in a separate thread.
+//                manageMyConnectedSocket(socket)
+            }
+        }
+
+        fun cancel() {
+            try {
+                mmSocket?.close()
+            } catch (e: IOException) {
+                Log.e("@ani", "Could not close the client socket", e)
+            }
+        }
+
+        fun  manageMyConnectedSocket(socket: BluetoothSocket) {
+            val inputStream = socket.inputStream
+            val outputStream = socket.outputStream
+
+            try {
+                outputStream.write("Hey I am client, Just Connected with you".toByteArray())
+
+                val messageFormServer = inputStream.bufferedReader().use{
+                    it.readText()
+                }
+
+                Log.i("@ani", "Message From Server")
+                Log.i("@ani", messageFormServer)
+            } catch (e: IOException) {
+                Log.e("@ani", "Could not close the client socket", e)
+            }
+        }
     }
 }
 
