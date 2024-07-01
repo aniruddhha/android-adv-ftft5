@@ -1,4 +1,8 @@
 package com.ani.android.hilt.login.repository
 
-class LocalRepository {
+import com.ani.android.hilt.login.dao.CarDao
+
+class LocalRepository(
+    private val dao: CarDao
+) {
 }

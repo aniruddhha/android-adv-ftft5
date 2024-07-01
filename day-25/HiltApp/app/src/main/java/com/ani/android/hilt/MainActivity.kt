@@ -11,17 +11,31 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.ani.android.hilt.login.composable.Login
+import com.ani.android.hilt.login.repository.LocalRepository
+import com.ani.android.hilt.login.repository.RemoteRepository
+import com.ani.android.hilt.login.rest.CarRestApi
+import com.ani.android.hilt.login.viewmodel.LoginViewModel
 import com.ani.android.hilt.ui.theme.HiltAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        val carRestApi = (application as MyApp).retrofit.create(CarRestApi::class.java)
+        val carDao = (application as MyApp).db.carDao()
+
+        val remoteRepository = RemoteRepository(carRestApi)
+        val localRepository = LocalRepository(carDao)
+
+        val vm = LoginViewModel(
+            localRepository,
+            remoteRepository
+        )
+
         setContent {
             HiltAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-
-                }
+                Login(vm)
             }
         }
     }

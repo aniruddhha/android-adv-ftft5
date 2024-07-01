@@ -1,4 +1,7 @@
 package com.ani.android.hilt.login.repository
 
-class RemoteRepository {
-}
+import com.ani.android.hilt.login.rest.CarRestApi
+
+class RemoteRepository (
+    carRestApi: CarRestApi
+)
