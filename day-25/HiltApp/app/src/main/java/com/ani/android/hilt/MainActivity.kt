@@ -17,25 +17,27 @@ import com.ani.android.hilt.login.repository.RemoteRepository
 import com.ani.android.hilt.login.rest.CarRestApi
 import com.ani.android.hilt.login.viewmodel.LoginViewModel
 import com.ani.android.hilt.ui.theme.HiltAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val carRestApi = (application as MyApp).retrofit.create(CarRestApi::class.java)
-        val carDao = (application as MyApp).db.carDao()
-
-        val remoteRepository = RemoteRepository(carRestApi)
-        val localRepository = LocalRepository(carDao)
-
-        val vm = LoginViewModel(
-            localRepository,
-            remoteRepository
-        )
+//        val carRestApi = (application as MyApp).retrofit.create(CarRestApi::class.java)
+//        val carDao = (application as MyApp).db.carDao()
+//
+//        val remoteRepository = RemoteRepository(carRestApi)
+//        val localRepository = LocalRepository(carDao)
+//
+//        val vm = LoginViewModel(
+//            localRepository,
+//            remoteRepository
+//        )
 
         setContent {
             HiltAppTheme {
-                Login(vm)
+//                Login(vm)
             }
         }
     }
